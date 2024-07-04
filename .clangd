@@ -1,0 +1,14 @@
+Diagnostics:
+    ClangTidy:
+        Add:
+            - 'bugprone-*'
+            - 'clang-analyzer-*'
+            - 'misc-*'
+            - 'modernize-*'
+            - 'performance-*'
+            - 'portability-*'
+            - 'readability-*'
+        Remove:
+            - misc-unused-parameters # there's already a build option to prevent this, so this check is useless
+            - readability-redundant-control-flow
+            - readability-magic-numbers # annoying as hellllllllllllllllllllllllllllll
