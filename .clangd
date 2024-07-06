@@ -10,5 +10,6 @@ Diagnostics:
             - 'readability-*'
         Remove:
             - misc-unused-parameters # there's already a build option to prevent this, so this check is useless
+            - bugprone-easily-swappable-parameters
             - readability-redundant-control-flow
             - readability-magic-numbers # annoying as hellllllllllllllllllllllllllllll
