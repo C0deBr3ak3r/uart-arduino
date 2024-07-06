@@ -51,12 +51,12 @@ enum uart_config : uint8_t {
 
 _Static_assert(sizeof(enum uart_config) == 1, "");
 
-extern void   uart_init(uint16_t baud_rate_reg, enum uart_config config);
-extern char   uart_getc(void);
-extern void   uart_putc(char data);
-extern void   uart_puts(const char* message);
-extern void   uart_gets(char* buffer, size_t buf_size);
-extern size_t uart_read(void* buffer, size_t buf_size);
-extern void   uart_write(const void* buffer, size_t buf_size);
+extern void uart_init(uint16_t baud_rate_reg, enum uart_config config);
+extern char uart_getc(void);
+extern void uart_putc(char data);
+extern void uart_puts(const char* message);
+extern void uart_gets(char* buffer, size_t buf_size);
+extern void uart_read(void* buffer, size_t buf_size);
+extern void uart_write(const void* buffer, size_t buf_size);
 
 #endif // UART_H

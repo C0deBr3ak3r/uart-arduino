@@ -26,6 +26,14 @@ int main(void) {
         uart_gets(buf, sizeof(char) * 8);
         uart_puts("This was your input: ");
         uart_puts(buf);
+
+        uart_puts("Using uart_read now (bad idea): ");
+        if (uart_read(buf, sizeof(char) * 8) == 8) {
+            uart_write(buf, 8);
+            uart_puts("No linefeeds :(");
+            continue;
+        }
+        uart_puts("Bad idea went wrong");
     }
     return 0;
 }

@@ -96,3 +96,28 @@ void uart_gets(char* buffer, size_t buf_size) {
 
     return;
 }
+
+void uart_read(void* buffer, size_t buf_size) {
+    uint8_t* buf_cpy = (uint8_t*)buffer;
+
+    for (size_t i = 0; i < (buf_size); i++) {
+        // Wait until RXB has data
+        while ((UCSR0A & (1 << RXC0)) == 0) {
+            ;
+        }
+        buf_cpy[i] = UDR0;
+    }
+    return;
+}
+
+void uart_write(const void* buffer, size_t buf_size) {
+    uint8_t* buf_cpy = (uint8_t*)buffer;
+    for (size_t i = 0; i < buf_size; i++) {
+        // Wait until transmit buffer is ready to receive new data
+        while ((UCSR0A & (1 << UDRE0)) == 0) {
+            ;
+        }
+
+        UDR0 = buf_cpy[i];
+    }
+}
