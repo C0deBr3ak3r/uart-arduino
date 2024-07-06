@@ -40,6 +40,10 @@ void uart_putc(char data) {
 
 // TODO: Document defines `UART_TRAILING_NEW_LINE`, `UART_CRLF`
 void uart_puts(const char* message) {
+    if (message == NULL) {
+        return;
+    }
+
     for (size_t i = 0; message[i] != '\0'; i++) {
         // Wait until transmit buffer is ready to receive new data
         while ((UCSR0A & (1 << UDRE0)) == 0) {
@@ -79,6 +83,10 @@ void uart_puts(const char* message) {
 // Stops when buffer is full, a NUL byte, a carriage return (\r) or a new line (\n) is written,
 // preserving them
 void uart_gets(char* buffer, size_t buf_size) {
+    if (buffer == NULL) {
+        return;
+    }
+
     size_t chars_readed = 0;
 
     while (chars_readed < (buf_size - 1)) {
@@ -98,6 +106,10 @@ void uart_gets(char* buffer, size_t buf_size) {
 }
 
 void uart_read(void* buffer, size_t buf_size) {
+    if (buffer == NULL) {
+        return;
+    }
+
     uint8_t* buf_cpy = (uint8_t*)buffer;
 
     for (size_t i = 0; i < (buf_size); i++) {
@@ -111,6 +123,10 @@ void uart_read(void* buffer, size_t buf_size) {
 }
 
 void uart_write(const void* buffer, size_t buf_size) {
+    if (buffer == NULL) {
+        return;
+    }
+
     uint8_t* buf_cpy = (uint8_t*)buffer;
     for (size_t i = 0; i < buf_size; i++) {
         // Wait until transmit buffer is ready to receive new data
