@@ -19,6 +19,13 @@ int main(void) {
         uart_putc('l');
         uart_putc('d');
         uart_putc('\n');
+
+        uart_puts("It was lots of putc's");
+        uart_puts("Input 7 characters:");
+        char buf[8];
+        uart_gets(buf, sizeof(char) * 8);
+        uart_puts("This was your input: ");
+        uart_puts(buf);
     }
     return 0;
 }
