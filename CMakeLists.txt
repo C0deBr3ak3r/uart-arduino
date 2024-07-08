@@ -1,60 +1,60 @@
 cmake_minimum_required(VERSION 3.30)
 
-set(PROJECT_VERSION	0.0.1)
-project(ArduinoUART VERSION ${PROJECT_VERSION} LANGUAGES C)
-
-set(LIBNAME	uart)
-set(EXNAME	uart_example)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+project(ArduinoUART VERSION 0.0.1 LANGUAGES C)
 
 set(CMAKE_C_COMPILER			avr-gcc)
 set(CMAKE_C_STANDARD			17)
 set(CMAKE_C_STANDARD_REQUIRED	True)
 set(C_EXTENSIONS				ON)
 
-set(ARDUINO_BOARD			uno)
-set(ARDUINO_MICROCONTROLER	atmega328p)
-set(ARDUINO_BAUD_RATE		11520)
-set(ARDUINO_FREQUENCY		16000000)
-set(ARDUINO_PROGRAMMER		arduino)
-set(ARDUINO_BOARD_PORT		/dev/ttyUSB0)
-
-add_compile_options(
+add_library(uart STATIC uart.c)
+target_compile_options(uart PUBLIC
 	-Wall
 	-Wextra
 	-Werror
 	-Os
-	-DF_CPU=${ARDUINO_FREQUENCY}UL
-	-DBAUD=${ARDUINO_BAUD_RATE}UL
-	-mmcu=${ARDUINO_MICROCONTROLER}
-	-DUART_TRAILING_NEWLINE
 )
 
-add_link_options(
-	-mmcu=${ARDUINO_MICROCONTROLER}
-)
+target_include_directories(uart PUBLIC ./)
 
-add_library(${LIBNAME} STATIC src/uart.c)
+### Developemnt options
+option(UART_DEV OFF)
+if(UART_DEV)
+	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(${EXNAME}.elf src/uart_example.c)
-target_link_libraries(${EXNAME}.elf ${LIBNAME})
+	target_link_options(uart PUBLIC
+		-mmcu=atmega328p
+	)
+	target_compile_options(uart PUBLIC
+		-mmcu=atmega328p
+	)
 
-add_custom_target(hex ALL
-	avr-objcopy
-	-S
-	-R .eeprom
-	-O ihex
-	${EXNAME}.elf
-	${EXNAME}.hex
-	DEPENDS ${EXNAME}.elf
-)
+	target_compile_definitions(uart PUBLIC
+		F_CPU=16000000UL
+		BAUD=9600UL
+		UART_TRAILING_NEWLINE
+	)
 
-add_custom_target(upload
-	avrdude
-	-c ${ARDUINO_PROGRAMMER}
-	-p ${ARDUINO_MICROCONTROLER}
-	-U flash:w:${EXNAME}.hex
-	-P ${ARDUINO_BOARD_PORT}
-	DEPENDS hex
-)
+	add_executable(uart_example.elf uart_example.c)
+	target_link_libraries(uart_example.elf uart)
+
+	add_custom_target(hex ALL
+		avr-objcopy
+		-S
+		-R .eeprom
+		-O ihex
+		uart_example.elf
+		uart_example.hex
+		DEPENDS uart_example.elf
+	)
+
+	add_custom_target(upload
+		avrdude
+		-c arduino					# Programmer
+		-p atmega328p				# MCU
+		-U flash:w:uart_example.hex
+		-P /dev/ttyUSB0
+		-v -v
+		DEPENDS hex
+	)
+endif()
