@@ -3,7 +3,7 @@
 #include "uart.h"
 
 int main(void) {
-    uart_init(F_CPU / 16 / BAUD - 1, UART_ASYNC_PLESS_DSTOP_8C);
+    uart_init(F_CPU / 16 / BAUD - 1, UART_ASYNC_PLESS_DSTOP);
     while (1) {
         _delay_ms(1 * 1000);
 

@@ -2,7 +2,7 @@
 
 #include "uart.h"
 
-void uart_init(uint16_t baud_rate_reg, enum uart_config config) {
+void uart_init(uint16_t baud_rate_reg, uint8_t config) {
 
     // Set baud rate
     UBRR0H = (uint8_t)(baud_rate_reg >> 8);

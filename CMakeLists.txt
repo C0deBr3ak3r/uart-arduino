@@ -3,12 +3,13 @@ cmake_minimum_required(VERSION 3.30)
 project(ArduinoUART VERSION 0.0.1 LANGUAGES C)
 
 set(CMAKE_C_COMPILER			avr-gcc)
-set(CMAKE_C_STANDARD			17)
+set(CMAKE_C_STANDARD			99)
 set(CMAKE_C_STANDARD_REQUIRED	True)
-set(C_EXTENSIONS				ON)
+set(C_EXTENSIONS				OFF)
 
 add_library(uart STATIC uart.c)
 target_compile_options(uart PUBLIC
+	-pedantic
 	-Wall
 	-Wextra
 	-Werror
